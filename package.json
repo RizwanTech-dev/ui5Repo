@@ -2,7 +2,14 @@
   "name": "ui5App-cds",
   "version": "1.0.0",
   "devDependencies": {
-    "@sap/cds-dk": "^10.1.2"
+    "@sap/cds-dk": "^10.1.2",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.49"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+    "undeploy": "cf undeploy ui5App --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  }
 }
