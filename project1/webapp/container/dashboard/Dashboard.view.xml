@@ -1,0 +1,11 @@
+<mvc:View controllerName="com.riztech.ui5app.project1.container.dashboard.Dashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+	>
+	<f:DynamicPage id="dashboard" titleHeading="Dynamic Tiles" >
+        <f:content >
+            <VBox id="tileContainer" />
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

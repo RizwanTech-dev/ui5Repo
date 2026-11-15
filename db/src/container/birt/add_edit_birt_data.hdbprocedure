@@ -1,0 +1,81 @@
+PROCEDURE "ADD_EDIT_BIRT_DATA" (
+    IN IN_PARAM NCLOB,
+    OUT EX_MESSAGE NVARCHAR(256)
+)
+AS
+BEGIN
+
+    DECLARE br_id BIGINT;
+    DECLARE br_folderPath  NVARCHAR(500);
+    DECLARE br_reportName  NVARCHAR(200);
+    DECLARE br_contextName NVARCHAR(200);
+
+    DECLARE br_parameters  NVARCHAR(5000);  
+    DECLARE br_payload     NVARCHAR(5000);   
+
+    DECLARE br_qrCodeValue NVARCHAR(500);
+
+    SELECT id,
+           folderPath,
+           reportName,
+           contextName,
+           parameters,
+           payload,
+           qrCodeValue
+    INTO br_id,
+         br_folderPath,
+         br_reportName,
+         br_contextName,
+         br_parameters,
+         br_payload,
+         br_qrCodeValue
+    FROM JSON_TABLE(
+        :IN_PARAM,
+        '$'
+        COLUMNS(
+            id BIGINT PATH '$.id',
+            folderPath NVARCHAR(500) PATH '$.folderPath',
+            reportName NVARCHAR(200) PATH '$.reportName',
+            contextName NVARCHAR(200) PATH '$.contextName',
+            parameters NVARCHAR(5000) PATH '$.parameters',
+            payload NVARCHAR(5000) PATH '$.payload',
+            qrCodeValue NVARCHAR(500) PATH '$.qrCodeValue'
+        )
+    );
+
+    IF :br_id IS NOT NULL AND :br_id > 0 THEN
+
+        UPDATE "birt"
+        SET
+            "folderPath"  = :br_folderPath,
+            "reportName"  = :br_reportName,
+            "contextName" = :br_contextName,
+            "parameters"  = :br_parameters,
+            "payload"     = :br_payload,
+            "qrCodeValue" = :br_qrCodeValue
+        WHERE "id" = :br_id;
+
+    ELSE
+
+        INSERT INTO "birt" (
+            "folderPath",
+            "reportName",
+            "contextName",
+            "parameters",
+            "payload",
+            "qrCodeValue"
+        )
+        VALUES (
+            :br_folderPath,
+            :br_reportName,
+            :br_contextName,
+            :br_parameters,
+            :br_payload,
+            :br_qrCodeValue
+        );
+
+    END IF;
+
+    EX_MESSAGE := 'SUCCESS';
+
+END;

@@ -35,10 +35,13 @@
   "sap.ui5": {
     "flexEnabled": true,
     "dependencies": {
-      "minUI5Version": "1.154.0",
+      "minUI5Version": "1.133.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.ui.unified": {},
+        "sap.tnt": {},
+        "sap.f": {}
       }
     },
     "contentDensities": {
@@ -68,28 +71,54 @@
         "transition": "slide",
         "type": "View",
         "viewType": "XML",
-        "path": "com.riztech.ui5app.project1.view",
+        "path": "com.riztech.ui5app.project1.container",
         "async": true,
-        "viewPath": "com.riztech.ui5app.project1.view"
+        "viewPath": "com.riztech.ui5app.project1.container"
       },
       "routes": [
         {
-          "name": "RouteView1",
+          "name": "RouteDashboard",
           "pattern": ":?query:",
           "target": [
-            "TargetView1"
+            "Dashboard"
+          ]
+        },
+        {
+          "name": "dashboard",
+          "pattern": "dashboard",
+          "target": [
+            "Dashboard"
+          ]
+        },
+        {
+          "name": "birt",
+          "pattern": "birt",
+          "target": [
+            "Birt"
           ]
         }
       ],
       "targets": {
-        "TargetView1": {
-          "id": "View1",
-          "name": "View1"
+        "AppUnified": {
+          "viewName": "appunified.Appunified",
+          "viewId": "AppUnified"
+        },
+        "Dashboard": {
+          "id": "dashboard",
+          "name": "dashboard.Dashboard",
+          "parent": "AppUnified",
+          "controlId": "pageContainer",
+          "controlAggregation": "pages",
+          "viewId": "dashboard"
+        },
+        "Birt": {
+          "id": "birt",
+          "name": "birt.Birt"
         }
       }
     },
     "rootView": {
-      "viewName": "com.riztech.ui5app.project1.view.App",
+      "viewName": "com.riztech.ui5app.project1.app.App",
       "type": "XML",
       "id": "App",
       "async": true

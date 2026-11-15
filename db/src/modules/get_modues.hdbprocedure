@@ -1,0 +1,5 @@
+PROCEDURE "GET_MODULES" () 
+AS 
+BEGIN
+SELECT * FROM "modules";
+END

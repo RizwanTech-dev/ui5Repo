@@ -1,4 +1,4 @@
-<mvc:View controllerName="com.riztech.ui5app.project1.controller.App"
+<mvc:View controllerName="com.riztech.ui5app.project1.app.App"
     displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">

@@ -1,0 +1,115 @@
+<mvc:View
+	controllerName="com.riztech.ui5app.project1.container.birt.Birt"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+   	xmlns:f="sap.f"
+	xmlns:u="sap.ui.unified"
+	xmlns:core="sap.ui.core"
+	height="100%">
+	<f:SidePanel id="mySidePanel" toggle="onToggle" sidePanelPosition="Left">
+				<f:mainContent>
+				<ScrollContainer
+	         	height="100%"
+	         	width="100%"
+	         	horizontal="true"
+	         	vertical="true">
+	        		<FlexBox id="myFlexBox" direction="Row" fitContainer="true" renderType="Div" height="100%">
+	        			<!-- <PDFViewer class="sapUiSmallMarginEnd" source="{/Source}" title="{/Title1}" height="500%" width="auto" isTrustedSource="true">
+	        				<layoutData>
+	        					<FlexItemData growFactor="1"/>
+	        				</layoutData>
+	        			</PDFViewer> -->
+	        		</FlexBox>
+                	</ScrollContainer>
+				
+				</f:mainContent>
+				<f:items>
+					<f:SidePanelItem icon="sap-icon://building" text="Birt Details">
+						<VBox width="100%"> 
+					<OverflowToolbar width="100%">
+                        <Button text="Dashboard" press="onPressBack"  />
+						<ComboBox width="40%" selectedKey="{/id}" change="onChangeBirt"  placeholder="records"
+						                   busy="{/loader/recordsBusy}"
+				                           items="{
+				                           	path: '/records/'
+				                           }">
+				                     <core:Item key="{id}" text="{reportName}" />
+			                </ComboBox>
+						  <ToolbarSpacer/>
+						  <Button text="Save" press="onPressSave" type="Emphasized" busy="{/loader/saveBusy}"/>
+					</OverflowToolbar>
+						 <Label text="Folder Path" />
+		             	 <Input  value ="{/folderPath}" change="onChangeFolderPath"/>
+		             	 <Label text="report Name" />
+		                 <!-- <Input value="{/reportName}"  /> -->
+						 <ComboBox
+                                 id="reportComboBox"
+                                 selectedKey="{/reportName}"
+                                        items="{
+                                            path: 'reports>/records'
+                                        }"
+                                 placeholder="Select Report">
+
+                                 <core:Item
+                                     key="{reports>reportName}"
+                                     text="{reports>reportName}" />
+
+                          </ComboBox>
+                         <Label text="parameters: " />
+		             	 <TextArea value="{/parametersText}" width="100%" height="200px" />
+                        <HBox >
+		             	 <Label text="AppContext: " />
+						 <Input value="{/contextName}" class="sapUiTinyMarginBegin"/>
+                        </HBox>
+		             	 <TextArea value="{/payloadText}" width="100%" height="200px" />
+						
+		             	 <Text text="{/open}" width="100%" height="200px" />
+                         <Button text="PDF" press="onClickPreviewScreen" icon="sap-icon://physical-activity" busy="{/previewBtnBusy}"/>
+						
+						 <Text text="images:" width="100%" height="200px" />
+						 
+						 	<Table id="idProductsTable"
+		                    inset="false"
+		                            items="{
+			                                path: '/payload/images/',
+			                                sorter: {
+			                                	path: 'Name'
+			                                }
+		                                    }"   >
+	                               <headerToolbar>
+								  
+			                             <OverflowToolbar>
+			                             	<content>
+											    <ToolbarSpacer/>
+			                             		<Button text="Add Image" press="onAddImage" level="H2"/>
+			                             	</content>
+			                             </OverflowToolbar>
+		                   </headerToolbar>
+
+								<columns>
+		                                   	<Column
+		                                   		width="12em">
+		                                   		<Text text="Title" />
+		                                   	</Column>
+		                                   	<Column
+		                                   		width="12em">
+		                                   		<Text text="Uploader" />
+		                                   	</Column>
+		                                   
+		                       </columns>
+		                   <items>
+		                         <ColumnListItem vAlign="Middle">
+		                                    		<cells>
+													    <Input value="{imageName}"/>
+		                                    			<u:FileUploader buttonOnly="true" sameFilenameAllowed="true" tooltip="Bulk Upload" icon="sap-icon://upload"  iconOnly="true" change="onPressUploadImage" uploadComplete="handleUploadComplete"/>			      									
+		                                    		</cells>
+		                         </ColumnListItem>
+		                    </items>				
+						</Table>
+
+						</VBox>
+					</f:SidePanelItem>
+				</f:items>
+			</f:SidePanel>
+         
+</mvc:View>
