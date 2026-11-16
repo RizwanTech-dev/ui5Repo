@@ -28,7 +28,7 @@ sap.ui.define([
 			});
 			this.getView().setModel(oReportModel, "reports");
 
-			// this.loadReports();
+			this.loadReports();
 		},
 
 		async loadReports(fPath) {
@@ -133,6 +133,7 @@ sap.ui.define([
 			} else {
 				oData.folderPath = "";
 				oData.reportName = "";
+				await this.loadReports();
 			}
 
 			oModel.refresh();
@@ -197,7 +198,7 @@ sap.ui.define([
 				jQuery.sap.addUrlWhitelist("blob");
 				if (this._pdfViewer) {
 					this._pdfViewer.setSource(blobUrl);
-					this._pdfViewer.setTitle("Reservation Form (Preview)");
+					this._pdfViewer.setTitle(fileName + " (Preview)");
 
 				} else {
 					this._pdfViewer = await new PDFViewer({
@@ -208,11 +209,9 @@ sap.ui.define([
 						height: "500%",
 
 					});
+					this._flexxBox = this.getView().byId("myFlexBox");
+					this._flexxBox.addItem(this._pdfViewer);
 				}
-
-
-				this._flexxBox = this.getView().byId("myFlexBox");
-				this._flexxBox.addItem(this._pdfViewer);
 
 				oModel.setProperty("/previewBtnBusy", false);
 				// this.loadPrevPDF([response]);//Old Code 

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 4.13.0.v202303021806</property>
+    <property name="units">in</property>
+    <property name="iconFile">/templates/blank_report.gif</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <property name="imageDPI">120</property>
+    <data-sources>
+        <script-data-source name="ScriptedDataSource" id="4"/>
+    </data-sources>
+    <data-sets>
+        <script-data-set name="images" id="5">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">id</property>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">base64String</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">imageTitle</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">id</property>
+                    <text-property name="displayName">id</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">base64String</property>
+                    <text-property name="displayName">base64String</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">imageTitle</property>
+                    <text-property name="displayName">imageTitle</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">id</property>
+                        <property name="dataType">integer</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">base64String</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">imageTitle</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">ScriptedDataSource</property>
+            <method name="open"><![CDATA[importPackage(Packages.java.util);
+
+var reportData = reportContext.getAppContext().get("inputObject");
+
+if (reportData != null &amp;&amp; reportData["images"] != null) {
+    iterator = reportData["images"].iterator();
+} else {
+    iterator = java.util.Collections.emptyIterator();
+}]]></method>
+            <method name="fetch"><![CDATA[if(iterator != null &amp;&amp; iterator.hasNext()){
+  
+  var item = iterator.next();
+  
+  
+  row['id'] =item['id'];
+  row['base64String'] =item['imageSrc'];
+  row['imageTitle'] =item['imageTitle'];
+
+
+return true;
+}else{
+
+return false;
+}]]></method>
+        </script-data-set>
+    </data-sets>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <page-footer>
+                <text id="3">
+                    <property name="contentType">html</property>
+                    <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                </text>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <table id="6">
+            <property name="dataSet">images</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">id</property>
+                    <text-property name="displayName">id</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["id"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">imageTitle</property>
+                    <text-property name="displayName">imageTitle</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["imageTitle"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">imageRow</property>
+                    <expression name="expression" type="javascript">dataSetRow["base64String"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">imageData</property>
+                    <expression name="expression" type="javascript">dataSetRow["base64String"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <column id="20">
+                <property name="width">100px</property>
+            </column>
+            <column id="21"/>
+            <header>
+                <row id="7">
+                    <cell id="8">
+                        <label id="9">
+                            <text-property name="text">id</text-property>
+                        </label>
+                    </cell>
+                    <cell id="10">
+                        <label id="11">
+                            <text-property name="text">screenshots</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="12">
+                    <cell id="13">
+                        <data id="14">
+                            <property name="resultSetColumn">id</property>
+                        </data>
+                    </cell>
+                    <cell id="15">
+                        <grid id="26">
+                            <column id="27"/>
+                            <row id="28">
+                                <cell id="29">
+                                    <data id="16">
+                                        <property name="resultSetColumn">imageTitle</property>
+                                    </data>
+                                </cell>
+                            </row>
+                            <row id="30">
+                                <cell id="31">
+                                    <image id="33">
+                                        <property name="width">6in</property>
+                                        <property name="source">expr</property>
+                                        <expression name="valueExpr">org.apache.commons.codec.binary.Base64.decodeBase64(row["imageData"])</expression>
+                                    </image>
+                                </cell>
+                            </row>
+                        </grid>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="17">
+                    <cell id="18"/>
+                    <cell id="19"/>
+                </row>
+            </footer>
+        </table>
+        <!-- <table id="34">
+            <property name="dataSet">images</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">id</property>
+                    <text-property name="displayName">id</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["id"]</expression>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="name">base64String</property>
+                    <text-property name="displayName">base64String</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["base64String"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">imageTitle</property>
+                    <text-property name="displayName">imageTitle</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["imageTitle"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <column id="53"/>
+            <column id="54"/>
+            <column id="55"/>
+            <header>
+                <row id="35">
+                    <cell id="36">
+                        <label id="37">
+                            <text-property name="text">id</text-property>
+                        </label>
+                    </cell>
+                    <cell id="38">
+                        <label id="39">
+                            <text-property name="text">base64String</text-property>
+                        </label>
+                    </cell>
+                    <cell id="40">
+                        <label id="41">
+                            <text-property name="text">imageTitle</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="42">
+                    <cell id="43">
+                        <data id="44">
+                            <property name="resultSetColumn">id</property>
+                        </data>
+                    </cell>
+                    <cell id="45">
+                        <image id="56">
+                            <property name="width">2in</property>
+                            <property name="source">expr</property>
+                            <expression name="valueExpr">org.apache.commons.codec.binary.Base64.decodeBase64(row["base64String"]);</expression>
+                        </image>
+                    </cell>
+                    <cell id="47">
+                        <data id="48">
+                            <property name="resultSetColumn">imageTitle</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="49">
+                    <cell id="50"/>
+                    <cell id="51"/>
+                    <cell id="52"/>
+                </row>
+            </footer>
+        </table> -->
+    </body>
+</report>

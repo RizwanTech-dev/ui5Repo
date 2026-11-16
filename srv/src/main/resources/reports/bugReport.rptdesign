@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 4.13.0.v202303021806</property>
+    <property name="units">in</property>
+    <property name="iconFile">/templates/blank_report.gif</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <property name="imageDPI">120</property>
+    <parameters>
+        <scalar-parameter name="reportedBy" id="20">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
+    <data-sources>
+        <script-data-source name="ScriptedDataSource" id="4"/>
+    </data-sources>
+    <data-sets>
+        <script-data-set name="bugDetails" id="5">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">id</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">image</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">description</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">id</property>
+                    <text-property name="displayName">id</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">image</property>
+                    <text-property name="displayName">image</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">description</property>
+                    <text-property name="displayName">description</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">id</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">image</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">description</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">ScriptedDataSource</property>
+            <method name="open"><![CDATA[importPackage(Packages.java.util);
+
+var reportData = reportContext.getAppContext().get("inputObject");
+var list = null;
+
+if (reportData != null) {
+    if (typeof reportData.get === "function") {
+        list = reportData.get("bugDetails");
+    }
+    if (list == null && reportData["bugDetails"] != null) {
+        list = reportData["bugDetails"];
+    }
+}
+
+iterator = null;
+if (list != null) {
+    if (list.iterator) {
+        iterator = list.iterator();
+    } else if (list.length !== undefined) {
+        var idx = 0;
+        iterator = {
+            hasNext: function() { return idx < list.length; },
+            next: function() { return list[idx++]; }
+        };
+    }
+}
+
+if (iterator == null) {
+    iterator = java.util.Collections.emptyIterator();
+}]]></method>
+            <method name="fetch"><![CDATA[if (iterator != null && iterator.hasNext()) {
+    var item = iterator.next();
+
+    var itemId = "";
+    var itemImage = "";
+    var itemDesc = "";
+
+    if (item != null) {
+        if (typeof item.getId === "function") {
+            itemId = item.getId();
+        } else if (typeof item.get === "function") {
+            itemId = item.get("id");
+        } else if (item.id !== undefined) {
+            itemId = item.id;
+        } else if (item["id"] !== undefined) {
+            itemId = item["id"];
+        }
+
+        if (typeof item.getImage === "function") {
+            itemImage = item.getImage();
+        } else if (typeof item.get === "function") {
+            itemImage = item.get("image");
+        } else if (item.image !== undefined) {
+            itemImage = item.image;
+        } else if (item["image"] !== undefined) {
+            itemImage = item["image"];
+        }
+
+        if (typeof item.getDescription === "function") {
+            itemDesc = item.getDescription();
+        } else if (typeof item.get === "function") {
+            itemDesc = item.get("description");
+        } else if (item.description !== undefined) {
+            itemDesc = item.description;
+        } else if (item["description"] !== undefined) {
+            itemDesc = item["description"];
+        }
+    }
+
+    row['id'] = (itemId != null) ? String(itemId) : "";
+    row['image'] = (itemImage != null) ? String(itemImage) : "";
+    row['description'] = (itemDesc != null) ? String(itemDesc) : "";
+
+    return true;
+} else {
+    return false;
+}]]></method>
+        </script-data-set>
+    </data-sets>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <page-footer>
+                <text id="3">
+                    <property name="contentType">html</property>
+                    <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                </text>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <table id="6">
+            <property name="dataSet">bugDetails</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">image</property>
+                    <text-property name="displayName">image</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["image"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">Description</property>
+                    <expression name="expression" type="javascript">dataSetRow["description"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">id</property>
+                    <expression name="expression" type="javascript">dataSetRow["id"]+"."</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <column id="15"/>
+            <header>
+                <row id="7">
+                    <cell id="8">
+                        <data id="21">
+                            <list-property name="boundDataColumns">
+                                <structure>
+                                    <property name="name">reportedBy</property>
+                                    <expression name="expression" type="javascript">params["reportedBy"]</expression>
+                                    <property name="dataType">string</property>
+                                </structure>
+                            </list-property>
+                            <property name="resultSetColumn">reportedBy</property>
+                        </data>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="10">
+                    <list-property name="visibility">
+                        <structure>
+                            <property name="format">all</property>
+                            <expression name="valueExpr" type="javascript">row["image"] == null || row["image"] == "" || row["image"].length == 0</expression>
+                        </structure>
+                    </list-property>
+                    <cell id="11">
+                        <image id="19">
+                            <property name="source">expr</property>
+                            <expression name="valueExpr">org.apache.commons.codec.binary.Base64.decodeBase64(row["image"])</expression>
+                        </image>
+                    </cell>
+                </row>
+                <row id="16">
+                    <cell id="17">
+                        <grid id="22">
+                            <property name="width">7.9in</property>
+                            <column id="23">
+                                <property name="width">0.475in</property>
+                            </column>
+                            <column id="24">
+                                <property name="width">7.425in</property>
+                            </column>
+                            <row id="25">
+                                <cell id="26">
+                                    <data id="28">
+                                        <property name="textAlign">right</property>
+                                        <property name="resultSetColumn">id</property>
+                                    </data>
+                                </cell>
+                                <cell id="27">
+                                    <data id="18">
+                                        <property name="resultSetColumn">Description</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </grid>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="13">
+                    <cell id="14"/>
+                </row>
+            </footer>
+        </table>
+    </body>
+</report>
